@@ -1,0 +1,1 @@
+from .base import ModeloBase, ModeloDetalle

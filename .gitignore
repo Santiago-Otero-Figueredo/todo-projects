@@ -1,0 +1,8 @@
+.DS_Store
+*.pyc
+*__pycache__
+.vscode/
+.env
+alembic.ini
+
+migrations/*
