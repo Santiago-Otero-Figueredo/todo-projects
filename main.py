@@ -3,7 +3,13 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
-from apps.users.routers import router as user_router
+from core.security import JWTAuth
+
+from starlette.middleware.authentication import AuthenticationMiddleware
+
+from apps.users.routers import guest_router as guest_router
+from apps.users.routers import user_router as user_router
+
 from apps.auth.routers import router as auth_router
 # from core.db import get_new_session, create_tables
 
@@ -17,8 +23,12 @@ from apps.auth.routers import router as auth_router
 # create_tables()
 
 app = FastAPI()
+app.include_router(guest_router)
 app.include_router(user_router)
 app.include_router(auth_router)
+
+# Add Middleware
+app.add_middleware(AuthenticationMiddleware, backend=JWTAuth())
 
 # app.mount("/static", StaticFiles(directory="static"), name="static")
 
