@@ -1,6 +1,8 @@
 from sqlalchemy import CheckConstraint, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from core.database import get_db
+
 from typing import TYPE_CHECKING, List
 
 from ..base import ModeloDetalle
@@ -22,3 +24,9 @@ class Priority(ModeloDetalle):
         CheckConstraint("level IN (1, 2, 3)", name="check_level_in_values"),
         CheckConstraint("color ~ '^(#[0-9A-Fa-f]{6})$'", name="check_color_hex_format"),
     )
+
+    @staticmethod
+    def registro(name:str, level: int, color:str):
+        with get_db() as session:
+            session.add(Priority(name=name, level=level, color=color))
+            session.commit()
