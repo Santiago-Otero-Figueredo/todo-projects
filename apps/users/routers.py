@@ -93,6 +93,7 @@ async def user_login(request: Request, email: str = Form(...), password: str = F
     if await form.is_valid():
         User.get_login_token(data, session)
         # Redireccionar a otra API después de que el formulario sea válido
+        response.set_cookie(key="access_token", value=token, httponly=True)
         return RedirectResponse(url="/priorities", status_code=status.HTTP_303_SEE_OTHER)
     else:
         errors = form.errors
