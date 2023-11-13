@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 from typing import Generator
-from core.config import get_settings
+from config.settings import get_settings
 
 
 settings = get_settings()
@@ -23,9 +23,9 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 def create_tables():
     Base.metadata.create_all(bind=engine, checkfirst=True)
 
-def get_db() -> Generator:
-    db = SessionLocal()
+def get_session() -> Generator:
+    session = SessionLocal()
     try:
-        yield db
+        yield session
     finally:
-        db.close()
+        session.close()

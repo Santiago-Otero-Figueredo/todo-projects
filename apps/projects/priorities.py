@@ -1,14 +1,17 @@
-from sqlalchemy import CheckConstraint, String
+from sqlalchemy import CheckConstraint, String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from core.database import get_db
+from config.database import get_session
 
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Union
+
+from datetime import datetime
+
 
 from ..base import ModeloDetalle
 
-if TYPE_CHECKING:
-    from .tasks import Task
+#if TYPE_CHECKING:
+#from .tasks import Task
 
 
 class Priority(ModeloDetalle):
@@ -25,8 +28,30 @@ class Priority(ModeloDetalle):
         CheckConstraint("color ~ '^(#[0-9A-Fa-f]{6})$'", name="check_color_hex_format"),
     )
 
-    @staticmethod
-    def registro(name:str, level: int, color:str):
-        with get_db() as session:
-            session.add(Priority(name=name, level=level, color=color))
-            session.commit()
+    # @staticmethod
+    # def registro(name:str, level: int, color:str):
+    #     with get_session() as session:
+    #         session.add(Priority(name=name, level=level, color=color))
+    #         session.commit()
+
+
+class Project(ModeloDetalle):
+    __tablename__ = "project"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+
+    tasks: Mapped[List['Task']] = relationship(back_populates='project')
+
+
+class Task(ModeloDetalle):
+    __tablename__ = "task"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    finish_at: Mapped[Union[datetime, None]]
+    is_complete: Mapped[bool] = mapped_column(default=False)
+
+    priority_id: Mapped[int] = mapped_column(ForeignKey('priority.id'))
+    priority: Mapped['Priority'] = relationship(back_populates='tasks')
+
+    project_id: Mapped[int] = mapped_column(ForeignKey('project.id'))
+    project: Mapped['Project'] = relationship(back_populates='tasks')

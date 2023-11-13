@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Pagina 2</h2>
+    <h2>Hola</h2>
+    <h4>{{user.username}}</h4>
     <ul>
         {% for prioridad in prioridades%}
             <li><strong style="background-color: {{prioridad.color}};">COLOR</strong>{{prioridad.name}}</li>

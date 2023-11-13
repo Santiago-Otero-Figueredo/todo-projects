@@ -1,34 +1,42 @@
-from fastapi import FastAPI, Request, Depends
+from fastapi import FastAPI, Request, Depends, status
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
-from core.security import JWTAuth
+from sqlalchemy.orm import Session
+
 
 from starlette.middleware.authentication import AuthenticationMiddleware
 
 from apps.users.routers import guest_router as guest_router
 from apps.users.routers import user_router as user_router
+from apps.users.routers import auth_router as auth_router
 
-from apps.auth.routers import router as auth_router
-# from core.db import get_new_session, create_tables
+
+from config.security import get_current_user
+
+from config.database import get_session
 
 
 # from routers import auth
 
-# from tables.projects.priorities import Priority
+from apps.projects.priorities import Priority
 # from tables.users.user import User
 
 
 # create_tables()
+
+
 
 app = FastAPI()
 app.include_router(guest_router)
 app.include_router(user_router)
 app.include_router(auth_router)
 
+
+templates = Jinja2Templates(directory='templates')
+
 # Add Middleware
-app.add_middleware(AuthenticationMiddleware, backend=JWTAuth())
 
 # app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -45,12 +53,10 @@ app.add_middleware(AuthenticationMiddleware, backend=JWTAuth())
 
 
 
-# @app.get('/')
-# async def name(request: Request, token: str = Depends(oauth2_scheme)):
-#     prioridades = []
-#     with get_new_session() as session:
-#         prioridades = session.query(Priority).all()
-#     return templates.TemplateResponse('projects/registro.html', {'request':request, 'prioridades': prioridades})
+@app.get('/priorities', status_code=status.HTTP_200_OK)
+async def prioridades(request: Request, user = Depends(get_current_user), session: Session = Depends(get_session)):
+    prioridades = Priority.get_all(session)
+    return templates.TemplateResponse('projects/home.html', {'request':request, 'prioridades': prioridades, 'user': user})
 
 
 
