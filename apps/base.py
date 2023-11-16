@@ -15,7 +15,17 @@ class ModeloBase(Base):
     update_at: Mapped[datetime] = mapped_column(server_default=func.now(), onupdate=func.now())
     is_active: Mapped[bool] = mapped_column(default=True)
 
+    @classmethod
+    async def get_by_id(cls, id_search: int, session):
+        return session.query(cls).filter(cls.id == id_search).first()
 
+    @classmethod
+    async def get_all(cls, session):
+        return session.query(cls).all()
+
+    @classmethod
+    def get_all_active(cls, session):
+        return session.query(cls).filter(cls.is_active == True).all()
 
 class ModeloDetalle(ModeloBase):
     __abstract__ = True
@@ -23,3 +33,5 @@ class ModeloDetalle(ModeloBase):
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     name: Mapped[str] = mapped_column(String(50))
     description: Mapped[Union[str, None]]
+
+

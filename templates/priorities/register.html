@@ -1,0 +1,57 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+    Registro de proyecto
+{% endblock %}
+
+{% block content %}
+    <div>
+        <h2>List priorities</h2>
+        {% for priority in priorities %}
+            <form action="{{ url_for('update-priority', priority_id=priority.id) }}" method="POST" class="for" id="update-{{ priority.id }}">
+                <div class="border rounded row pt-3 px-2 m-2">
+                    <div class="row col-11">
+                        <div class="mb-3 col-3">
+                            <input type="text" class="form-control" value="{{ priority.name }}" placeholder="Name" name="name" id="name" required>
+                        </div>
+                        <div class="mb-3 col-3">
+                            <input type="text" class="form-control" value="{{ priority.description }}" placeholder="Description" name="description" id="description">
+                        </div>
+                        <div class="mb-3 col-3">
+                            <input type="number" class="form-control" value="{{ priority.level }}" placeholder="Level" name="level" id="level" required>
+                        </div>
+                        <div class="mb-3 col-3">
+                            <input type="color" class="form-control" value="{{ priority.color }}" placeholder="Color" name="color" id="color" required>
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <button type="submit" class="btn btn-primary">Modify</button>
+                    </div>
+                </div>
+            </form>
+        {% endfor %}
+    </div>
+
+    <h2>Register priority</h2>
+    <form action="{{ url_for('register-priority') }}" method="POST" class="for" id="register">
+        <div class="border rounded row pt-3 px-2 m-2">
+            <div class="row col-11">
+                <div class="mb-3 col-3">
+                    <input type="text" class="form-control" placeholder="Name" name="name" id="name" required>
+                </div>
+                <div class="mb-3 col-3">
+                    <input type="text" class="form-control" placeholder="description" name="description" id="description">
+                </div>
+                <div class="mb-3 col-3">
+                    <input type="number" class="form-control" placeholder="level" name="level" id="level" required>
+                </div>
+                <div class="mb-3 col-3">
+                    <input type="color" class="form-control" placeholder="color" name="color" id="color" required>
+                </div>
+            </div>
+            <div class="col-1">
+                <input type="submit" class="btn btn-primary" value="OK">
+            </div>
+        </div>
+    </form>
+{% endblock %}

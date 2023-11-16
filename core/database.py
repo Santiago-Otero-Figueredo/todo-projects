@@ -23,7 +23,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 def create_tables():
     Base.metadata.create_all(bind=engine, checkfirst=True)
 
-def get_db() -> Generator:
+def get_session() -> Generator:
     db = SessionLocal()
     try:
         yield db

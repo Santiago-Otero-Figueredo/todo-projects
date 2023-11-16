@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from .schemas import CreateUserRequest
 from .models import User
 
-from core.database import get_db
+from core.database import get_session
 from core.security import oauth2_scheme
 
 
@@ -25,7 +25,7 @@ user_router = APIRouter(
 
 
 @guest_router.post('', status_code=status.HTTP_201_CREATED)
-async def register(data: CreateUserRequest, db: Session = Depends(get_db)):
+async def register(data: CreateUserRequest, db: Session = Depends(get_session)):
     await User.register_account(data=data, db=db)
     payload = {"message": "User account has been successfully created."}
     return JSONResponse(content=payload)

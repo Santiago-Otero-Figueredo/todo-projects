@@ -4,9 +4,9 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from sqlalchemy.orm import Session
 
-from core.database import get_db
+from core.database import get_session
 
-from .services import get_token, get_refresh_token
+from apps.users.models import User
 
 router = APIRouter(
     prefix='/auth',
@@ -14,10 +14,18 @@ router = APIRouter(
     responses= {404: {'description': 'Not Found'}}
 )
 
-@router.post('/token', status_code=status.HTTP_200_OK)
-async def authenticate_user(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    return await get_token(data=data, db=db)
+@router.post('/register', status_code=status.HTTP_201_CREATED, name='register-user')
+async def authenticate_user(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_session)):
+    pass
 
-@router.post('/refresh', status_code=status.HTTP_200_OK)
-async def refresh_access_token(refresh_token: str = Header(), db: Session = Depends(get_db)):
-    return await get_refresh_token(token=refresh_token, db=db)
+@router.get('/login', status_code=status.HTTP_200_OK, name='login')
+async def authenticate_user(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_session)):
+    pass
+
+@router.post('/forgot-password', status_code=status.HTTP_200_OK, name='forgot-password')
+async def refresh_access_token(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_session)):
+    pass
+
+@router.post('/reset-password', status_code=status.HTTP_200_OK, name='reset-password')
+async def refresh_access_token(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_session)):
+    pass
