@@ -1,0 +1,8 @@
+{% set list_priorities_url = url_for('list-priority') %}
+
+<li class="sidebar-item">
+    <a href="{{ list_priorities_url }}" class="sidebar-link {% if list_priorities_url == request.url %} active-menu {% endif %}">
+        <i class="fas fa-atom"></i>
+        Priorities
+    </a>
+</li>

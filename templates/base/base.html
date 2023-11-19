@@ -38,6 +38,9 @@
                 list-style: none;
             }
 
+            .active-menu{
+                background-color: cadetblue;
+            }
             /* Layout for admin dashboard skeleton */
 
             .wrapper{
@@ -135,20 +138,56 @@
 
             .content {
                 flex: 1;
-                max-width: 85vw;
-                width: 85vw;
+
             }
 
             @media (min-width:768) {
                 .content {
-                    max-width: auto;
-                    width: auto;
+                    flex: 1;
+                    max-width: 85vw;
+                    width: 85vw;
                 }
             }
 
+            .list-container-task, .list-container-task textarea, .list-container-task input{
+                font-size: 12px;
+            }
 
-            /* Footer and Nav Style*/
+            .list-container-task select {
+                height: 2.5em;
+                font-size: 12px;
+            }
 
+            .list-container-task:hover{
+                background-color: #eee;
+            }
+
+
+            .custom-checkbox {
+                cursor: pointer;
+                transform: scale(2.5); /* Ajusta el valor según tus preferencias */
+                border: 1px solid #ccc; /* Ajusta el grosor y el color del borde según tus preferencias */
+            }
+
+
+            /* Estilo personalizado para quitar los bordes de form-control en Bootstrap */
+            .no-input-borders {
+                cursor: pointer;
+                border: none;
+                border-radius: 0; /* O ajusta según tus preferencias */
+                box-shadow: none; /* O ajusta según tus preferencias */
+            }
+
+            .no-input-borders:focus {
+                cursor: default;
+                border-bottom: 1px solid lightgray;
+            }
+
+            .no-input-borders:hover {
+
+                border-bottom: 1px solid lightgray;
+
+            }
 
         </style>
     {% endblock %}

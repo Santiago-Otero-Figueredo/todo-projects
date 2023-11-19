@@ -14,24 +14,10 @@
                     Dashboard
                 </a>
             </li>
-            <li class="sidebar-item">
-                <a href="#" class="sidebar-link collapsed" data-bs-target="#pages" data-bs-toggle="collapse" arial-expanded="false">
-                    <i class="fas fa-file-alt pe-2"></i>
-                    Pages
-                </a>
-                <ul id="pages" class="sidebar-dropdown list-style collapse" data-bs-parent="#sidebar">
-                    <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">
-                            Page 1
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">
-                            Page 2
-                        </a>
-                    </li>
-                </ul>
-            </li>
+            {% include 'base/menu/priorities.html' %}
+            {% include 'base/menu/projects.html' %}
+            {% include 'base/menu/tasks.html' %}
+
             <li class="sidebar-item">
                 <a href="#" class="sidebar-link collapsed" data-bs-target="#posts" data-bs-toggle="collapse" arial-expanded="false">
                     <i class="fas fa-sliders-h pe-2"></i>

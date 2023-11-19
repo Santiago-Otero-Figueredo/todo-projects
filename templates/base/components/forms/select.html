@@ -1,0 +1,14 @@
+<div class="{{ div_class }}">
+    <select class="form-select" name='{{name}}' {%if id %} id='{{id}}' {% endif %} {%if required %} required {% endif %} {%if color_inner %} style="background: {{color_inner}};"  {% endif %}>
+        <option value="" disabled {%if not default_value %} selected {% endif %} style="background-color: #eee;">{{placeholder}}</option>
+        {% for option in options %}
+            <option
+                value="{{ option.id }}"
+                {%if default_value == option.id %} selected {% endif %}
+                {%if option.color %} style="background-color: {{ option.color }};" {% endif %}
+            >
+                {{ option.name }}
+            </option>
+        {% endfor %}
+    </select>
+</div>

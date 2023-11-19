@@ -6,13 +6,9 @@ from sqlalchemy.orm import Session
 from fastapi.templating import Jinja2Templates
 
 from core.database import get_session
-from core.security import oauth2_scheme
-
-from typing_extensions import Annotated
 
 from apps.projects.schemas.priorities import CreatePriorityRequest
 from apps.projects.models import Priority
-
 
 templates = Jinja2Templates(directory='templates/')
 
@@ -21,6 +17,7 @@ router = APIRouter(
     tags=['Priorities'],
     responses= {404: {'description': 'Not Found'}}
 )
+
 
 @router.get('/list', status_code=status.HTTP_201_CREATED, response_class=HTMLResponse,  name='list-priority')
 async def register_priority(request: Request, session: Session = Depends(get_session)):
@@ -69,5 +66,19 @@ async def update_priority(request: Request,
         color=color
     )
     existing_priority.update(updated_priority, session)
+
+    return RedirectResponse(url=request.url_for('list-priority'), status_code=status.HTTP_303_SEE_OTHER)
+
+
+@router.post('/delete/{priority_id}', status_code=status.HTTP_204_NO_CONTENT, name='delete-priority')
+async def delete_priority(request: Request, priority_id: int, session: Session = Depends(get_session)):
+    existing_priority = await Priority.get_by_id(priority_id, session)
+
+    if existing_priority is None:
+        raise HTTPException(status_code=404, detail="Priority not found")
+
+    # Eliminar el registro
+    session.delete(existing_priority)
+    session.commit()
 
     return RedirectResponse(url=request.url_for('list-priority'), status_code=status.HTTP_303_SEE_OTHER)

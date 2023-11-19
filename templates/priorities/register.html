@@ -4,54 +4,95 @@
     Registro de proyecto
 {% endblock %}
 
-{% block content %}
-    <div>
-        <h2>List priorities</h2>
-        {% for priority in priorities %}
-            <form action="{{ url_for('update-priority', priority_id=priority.id) }}" method="POST" class="for" id="update-{{ priority.id }}">
-                <div class="border rounded row pt-3 px-2 m-2">
-                    <div class="row col-11">
-                        <div class="mb-3 col-3">
-                            <input type="text" class="form-control" value="{{ priority.name }}" placeholder="Name" name="name" id="name" required>
-                        </div>
-                        <div class="mb-3 col-3">
-                            <input type="text" class="form-control" value="{{ priority.description }}" placeholder="Description" name="description" id="description">
-                        </div>
-                        <div class="mb-3 col-3">
-                            <input type="number" class="form-control" value="{{ priority.level }}" placeholder="Level" name="level" id="level" required>
-                        </div>
-                        <div class="mb-3 col-3">
-                            <input type="color" class="form-control" value="{{ priority.color }}" placeholder="Color" name="color" id="color" required>
-                        </div>
-                    </div>
-                    <div class="col-1">
-                        <button type="submit" class="btn btn-primary">Modify</button>
-                    </div>
-                </div>
-            </form>
-        {% endfor %}
-    </div>
 
-    <h2>Register priority</h2>
-    <form action="{{ url_for('register-priority') }}" method="POST" class="for" id="register">
-        <div class="border rounded row pt-3 px-2 m-2">
-            <div class="row col-11">
-                <div class="mb-3 col-3">
-                    <input type="text" class="form-control" placeholder="Name" name="name" id="name" required>
+
+{% block content %}
+    <div class="px-2">
+        {% if priorities %}
+            <div class="mt-3">
+                <h3 class="text-uppercase fs-2 mb-4">List priorities</h3>
+                <div class="border-bottom border-top row pt-3">
+                    <div class="row col-10">
+                        <div class="mb-3 col-3">
+                            <strong>Name</strong>
+                        </div>
+                        <div class="mb-3 col-3">
+                            <strong>Description</strong>
+                        </div>
+                        <div class="mb-3 col-3">
+                            <strong>Level</strong>
+                        </div>
+                        <div class="mb-3 col-3">
+                            <strong>Color</strong>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <strong>Actions</strong>
+                    </div>
                 </div>
-                <div class="mb-3 col-3">
-                    <input type="text" class="form-control" placeholder="description" name="description" id="description">
-                </div>
-                <div class="mb-3 col-3">
-                    <input type="number" class="form-control" placeholder="level" name="level" id="level" required>
-                </div>
-                <div class="mb-3 col-3">
-                    <input type="color" class="form-control" placeholder="color" name="color" id="color" required>
-                </div>
+                {% for priority in priorities %}
+                    <form action="{{ url_for('update-priority', priority_id=priority.id) }}" method="POST" class="for" id="update-{{ priority.id }}">
+                        <div class="border-bottom row pt-3">
+                            <div class="row col-10">
+                                {% with div_class='mb-3 col-3', type='text', default_value=priority.name, placeholder='Name', name='name', required='required' %}
+                                    {% include 'base/components/forms/input.html' %}
+                                {% endwith %}
+                                {% with div_class='mb-3 col-3', type='text', default_value=priority.description, placeholder='Description', name=True %}
+                                    {% include 'base/components/forms/input.html' %}
+                                {% endwith %}
+                                {% with div_class='mb-3 col-3', type='number', default_value=priority.level, placeholder='Level', name='level', required=True %}
+                                    {% include 'base/components/forms/input.html' %}
+                                {% endwith %}
+                                {% with div_class='mb-3 col-3', input_class='form-control-color', type='color', default_value=priority.color, placeholder='Color', name='color', required=True %}
+                                    {% include 'base/components/forms/input.html' %}
+                                {% endwith %}
+                            </div>
+                            <div class="col-2">
+                                <button type="submit" class="btn btn-info update me-3"><i class="fas fa-pen"></i></button>
+                                <button type="button" class="btn btn-danger delete" data-form-id="update-{{ priority.id }}" data-action="{{ url_for('delete-priority', priority_id=priority.id) }}"><i class="fas fa-minus"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                {% endfor %}
             </div>
-            <div class="col-1">
-                <input type="submit" class="btn btn-primary" value="OK">
+        {% endif %}
+
+        <div class="mt-5">
+            <div id="add-container" class="d-none mb-3">
+                <h4 class="text-uppercase fs-3 mb-4">Add new priority</h4>
+                <form action="{{ url_for('register-priority') }}" method="POST" class="for border-top" id="register">
+                    <div class="border-bottom row pt-3">
+                        <div class="row col-10">
+                            {% with div_class='mb-3 col-3', type='text', placeholder='Name', name='name', required=True %}
+                                {% include 'base/components/forms/input.html' %}
+                            {% endwith %}
+                            {% with div_class='mb-3 col-3', type='text', placeholder='Description', name='description' %}
+                                {% include 'base/components/forms/input.html' %}
+                            {% endwith %}
+                            {% with div_class='mb-3 col-3', type='number', placeholder='Level', name='level', required=True %}
+                                {% include 'base/components/forms/input.html' %}
+                            {% endwith %}
+                            {% with div_class='mb-3 col-3', input_class='form-control-color', type='color', placeholder='Color', name='color', required=True %}
+                                {% include 'base/components/forms/input.html' %}
+                            {% endwith %}
+                        </div>
+                        <div class="col-2">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-check"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="justify-content-end">
+                <button id="btn-add-register" class="btn btn-success"><i class="fas fa-plus"></i></button>
             </div>
         </div>
-    </form>
+    </div>
+
+    {% include 'base/components/forms/modal-confirm-delete.html' %}
+
+{% endblock %}
+
+{% block javascript %}
+    {{ super() }}
+    <script src="{{ url_for('static', path='/js/custom/forms/register.js') }}"></script>
 {% endblock %}

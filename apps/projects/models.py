@@ -24,6 +24,7 @@ class Priority(ModeloDetalle):
         CheckConstraint("color ~ '^(#[0-9A-Fa-f]{6})$'", name="check_color_hex_format"),
     )
 
+
     def update(self, data, session):
         self.name = data.name
         self.description = data.description
@@ -33,7 +34,9 @@ class Priority(ModeloDetalle):
         session.commit()
         session.refresh(self)
 
-
+    @classmethod
+    async def get_all(cls, session):
+        return session.query(cls).order_by(cls.level).all()
 
     @staticmethod
     def create(data, session):
@@ -51,6 +54,20 @@ class Project(ModeloDetalle):
 
     tasks: Mapped[List['Task']] = relationship(back_populates='project')
 
+    def update(self, data, session):
+        self.name = data.name
+        self.description = data.description
+
+        session.commit()
+        session.refresh(self)
+
+    @staticmethod
+    def create(data, session):
+        new_project = Project(name=data.name, description=data.description)
+        session.add(new_project)
+        session.commit()
+        session.refresh(new_project)
+
 
 class Task(ModeloDetalle):
     __tablename__ = "task"
@@ -64,3 +81,26 @@ class Task(ModeloDetalle):
 
     project_id: Mapped[int] = mapped_column(ForeignKey('project.id'))
     project: Mapped['Project'] = relationship(back_populates='tasks')
+
+
+    def update(self, data, session):
+        self.name = data.name
+        self.description = data.description
+        self.project_id = data.project
+        self.priority_id = data.priority
+
+        session.commit()
+        session.refresh(self)
+
+    def complete(self, data, session):
+        self.is_complete = data.is_complete
+
+        session.commit()
+        session.refresh(self)
+
+    @staticmethod
+    def create(data, session):
+        new_task = Task(name=data.name, description=data.description, project_id = data.project, priority_id = data.priority)
+        session.add(new_task)
+        session.commit()
+        session.refresh(new_task)

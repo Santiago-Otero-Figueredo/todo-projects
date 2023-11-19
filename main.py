@@ -13,6 +13,10 @@ from apps.users.routers import user_router as user_router
 from apps.auth.routers import router as auth_router
 
 from apps.projects.routers.priorities import router as priority_router
+from apps.projects.routers.projects import router as project_router
+from apps.projects.routers.tasks import router as task_router
+
+
 
 import os
 # from core.db import get_new_session, create_tables
@@ -31,6 +35,10 @@ app.include_router(user_router)
 app.include_router(auth_router)
 
 app.include_router(priority_router)
+app.include_router(project_router)
+app.include_router(task_router)
+
+
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 

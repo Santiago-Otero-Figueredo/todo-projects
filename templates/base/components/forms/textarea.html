@@ -1,0 +1,11 @@
+<div class="{{ div_class }}">
+    <textarea
+        class="form-control {{input_class}}"
+        placeholder="{{placeholder}}"
+        name="{{name}}"
+        id="{{id}}"
+        rows="{{rows}}"
+        {%if not resize %} style="resize: none;"{% endif %}
+        {%if required %} required {% endif %}
+    >{{ default_value }}</textarea>
+</div>

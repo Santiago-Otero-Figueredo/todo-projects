@@ -1,0 +1,8 @@
+{% set list_projects_url = url_for('list-projects') %}
+
+<li class="sidebar-item">
+    <a href="{{ list_projects_url }}" class="sidebar-link {% if list_projects_url == request.url %} active-menu {% endif %}">
+        <i class="fas fa-project-diagram"></i>
+        Projects
+    </a>
+</li>

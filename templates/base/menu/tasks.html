@@ -1,0 +1,26 @@
+{% set list_tasks_url = url_for('list-tasks') %}
+
+<li class="sidebar-item">
+    <a href="" class="sidebar-link {% if list_tasks_url != request.url %} collapsed {% endif %} {% if list_tasks_url == request.url %} active-menu {% endif %}" data-bs-target="#task-menu" data-bs-toggle="collapse" arial-expanded="false">
+        <i class="fas fa-atom"></i>
+        Task
+    </a>
+    <ul id="task-menu" class="sidebar-dropdown list-style {% if list_tasks_url != request.url %} collapsed {% endif %}" data-bs-parent="#sidebar">
+        <li class="sidebar-item sidebar-link {% if list_tasks_url == request.url %} active-menu {% endif %}">
+            <a href="{{ list_tasks_url }}" class="sidebar-link">
+                Register
+            </a>
+        </li>
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link">
+                By project
+            </a>
+        </li>
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link">
+                Completed
+            </a>
+        </li>
+    </ul>
+</li>
+
