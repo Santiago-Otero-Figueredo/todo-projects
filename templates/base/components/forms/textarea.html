@@ -5,7 +5,7 @@
         name="{{name}}"
         id="{{id}}"
         rows="{{rows}}"
-        {%if not resize %} style="resize: none;"{% endif %}
+        style="{%if not resize %}resize: none;{% endif %} overflow: hidden;"
         {%if required %} required {% endif %}
     >{{ default_value }}</textarea>
 </div>

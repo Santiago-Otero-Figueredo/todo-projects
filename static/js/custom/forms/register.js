@@ -56,13 +56,13 @@ document.querySelectorAll('.delete').forEach(function(button) {
                 method: 'POST', // o 'POST' según tu ruta y método
             })
             .then(response => {
-            if (response.ok) {
-                // Puedes realizar alguna acción adicional si la eliminación fue exitosa
-                console.log('Tarea eliminada exitosamente');
-                window.location.reload();
-            } else {
-                console.error('Error al intentar eliminar la tarea');
-            }
+                if (response.ok) {
+                    // Puedes realizar alguna acción adicional si la eliminación fue exitosa
+                    console.log('Tarea eliminada exitosamente');
+                    window.location.reload();
+                } else {
+                    console.error('Error al intentar eliminar la tarea');
+                }
             })
             .catch(error => console.error('Error en la solicitud:', error))
             .finally(() => {
@@ -73,32 +73,3 @@ document.querySelectorAll('.delete').forEach(function(button) {
     });
 });
 
-
-document.querySelectorAll('.complete-task').forEach(function(button) {
-    button.addEventListener('click', function() {
-        var completeAction = button.getAttribute('data-action');
-
-        // Enviar la solicitud para eliminar la tarea
-        fetch(completeAction, {
-            method: 'POST', // o 'POST' según tu ruta y método
-            headers: {
-                'Content-Type': 'application/json', // Especificar el tipo de contenido como JSON
-            },
-            body: JSON.stringify({
-                'is_complete': button.checked
-            }),
-        })
-        .then(response => {
-        if (response.ok) {
-            // Puedes realizar alguna acción adicional si la eliminación fue exitosa
-            console.log('Tarea completada exitosamente');
-        } else {
-            console.error('Error al intentar completar la tarea');
-        }
-        })
-        .catch(error => console.error('Error en la solicitud:', error))
-        .finally(() => {
-            console.error('Finally');
-        });
-    });
-});

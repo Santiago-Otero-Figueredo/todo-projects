@@ -7,6 +7,7 @@ from datetime import datetime
 from core.database import Base
 # Definición de las tablas
 
+
 class ModeloBase(Base):
     __abstract__ = True
 
@@ -15,6 +16,10 @@ class ModeloBase(Base):
     update_at: Mapped[datetime] = mapped_column(server_default=func.now(), onupdate=func.now())
     is_active: Mapped[bool] = mapped_column(default=True)
 
+
+    @property
+    def created_at_formatted(self):
+        return self.created_at.strftime('%Y-%m-%d %H:%M')
 
     @classmethod
     async def get_by_id(cls, id_search: int, session):
@@ -25,8 +30,15 @@ class ModeloBase(Base):
         return session.query(cls).order_by(cls.created_at).all()
 
     @classmethod
+    async def get_by_filter(cls, filters: dict, session):
+        if filters:
+            return session.query(cls).filter_by(**filters).order_by(cls.created_at).all()
+        return session.query(cls).order_by(cls.created_at).all()
+
+    @classmethod
     def get_all_active(cls, session):
         return session.query(cls).filter(cls.is_active == True).all()
+
 
 class ModeloDetalle(ModeloBase):
     __abstract__ = True
@@ -34,5 +46,11 @@ class ModeloDetalle(ModeloBase):
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     name: Mapped[str] = mapped_column(String(50))
     description: Mapped[Union[str, None]]
+
+
+    @classmethod
+    async def get_by_name(cls, name: str, session):
+        return session.query(cls).filter(cls.name == name).first()
+
 
 

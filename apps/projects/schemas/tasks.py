@@ -11,4 +11,4 @@ class CreateTaskRequest(BaseModel):
 
 
 class CompleteTaskRequest(BaseModel):
-    is_complete: bool
+    state: int

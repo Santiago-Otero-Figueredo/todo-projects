@@ -149,6 +149,25 @@
                 }
             }
 
+            .description-text{
+                height: 10px;
+                border-radius: 10px;
+            }
+
+            .list-container-task{
+                background-color: #fff; /* Color de fondo de la tarjeta */
+                border-radius: 10px; /* Bordes redondeados */
+                overflow: hidden; /* Evitar que el sombreado se extienda más allá de la tarjeta */
+
+                /* Sombreado */
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+                transition: transform 0.3s ease; /* Transición al pasar el cursor */
+            }
+
+            .list-container-task:hover {
+                transform: translateY(-5px); /* Efecto de elevación al pasar el cursor */
+            }
+
             .list-container-task, .list-container-task textarea, .list-container-task input{
                 font-size: 12px;
             }

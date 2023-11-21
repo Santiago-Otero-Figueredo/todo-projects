@@ -54,12 +54,17 @@ class Project(ModeloDetalle):
 
     tasks: Mapped[List['Task']] = relationship(back_populates='project')
 
+
     def update(self, data, session):
         self.name = data.name
         self.description = data.description
 
         session.commit()
         session.refresh(self)
+
+    @classmethod
+    async def get_all(cls, session):
+        return session.query(cls).order_by(cls.name).all()
 
     @staticmethod
     def create(data, session):
@@ -82,6 +87,12 @@ class Task(ModeloDetalle):
     project_id: Mapped[int] = mapped_column(ForeignKey('project.id'))
     project: Mapped['Project'] = relationship(back_populates='tasks')
 
+    state_id: Mapped[int] = mapped_column(ForeignKey('state.id'), nullable=True)
+    state: Mapped['State'] = relationship(back_populates='tasks')
+
+    @property
+    def finish_at_formatted(self):
+        return self.finish_at.strftime('%Y-%m-%d %H:%M')
 
     def update(self, data, session):
         self.name = data.name
@@ -93,14 +104,50 @@ class Task(ModeloDetalle):
         session.refresh(self)
 
     def complete(self, data, session):
-        self.is_complete = data.is_complete
+        self.state_id = data.state
+        if data.state == 1:
+            self.finish_at = datetime.now()
 
         session.commit()
         session.refresh(self)
 
+
     @staticmethod
-    def create(data, session):
-        new_task = Task(name=data.name, description=data.description, project_id = data.project, priority_id = data.priority)
+    async def create(data, session):
+        state = await State.get_by_name('Not initialized', session)
+        new_task = Task(name=data.name, description=data.description, project_id = data.project, priority_id = data.priority, state_id=state.id)
         session.add(new_task)
         session.commit()
         session.refresh(new_task)
+
+
+class State(ModeloDetalle):
+    __tablename__ = "state"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    color: Mapped[str] = mapped_column(String(7))
+
+    tasks: Mapped[List['Task']] = relationship(back_populates='state')
+
+    __table_args__ = (
+        CheckConstraint("color ~ '^(#[0-9A-Fa-f]{6})$'", name="check_color_hex_format"),
+    )
+
+    def update(self, data, session):
+        self.name = data.name
+        self.description = data.description
+        self.color = data.color
+
+        session.commit()
+        session.refresh(self)
+
+    @classmethod
+    async def get_all(cls, session):
+        return session.query(cls).order_by(cls.name).all()
+
+    @staticmethod
+    def create(data, session):
+        new_state = State(name=data.name, description=data.description, color=data.color)
+        session.add(new_state)
+        session.commit()
+        session.refresh(new_state)

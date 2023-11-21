@@ -1,0 +1,8 @@
+{% set list_states_url = url_for('list-states') %}
+
+<li class="sidebar-item">
+    <a href="{{ list_states_url }}" class="sidebar-link {% if list_states_url == request.url %} active-menu {% endif %}">
+        <i class="fas fa-atom"></i>
+        States
+    </a>
+</li>

@@ -15,6 +15,8 @@ from apps.auth.routers import router as auth_router
 from apps.projects.routers.priorities import router as priority_router
 from apps.projects.routers.projects import router as project_router
 from apps.projects.routers.tasks import router as task_router
+from apps.projects.routers.states import router as state_router
+
 
 
 
@@ -37,6 +39,8 @@ app.include_router(auth_router)
 app.include_router(priority_router)
 app.include_router(project_router)
 app.include_router(task_router)
+app.include_router(state_router)
+
 
 
 
