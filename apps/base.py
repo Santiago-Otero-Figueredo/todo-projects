@@ -32,11 +32,14 @@ class ModeloBase(Base):
     @classmethod
     async def get_by_filter(cls, filters: dict, session):
         if filters:
-            return session.query(cls).filter_by(**filters).order_by(cls.created_at).all()
-        return session.query(cls).order_by(cls.created_at).all()
+            query = session.query(cls)
+            query = query.filter_by(**filters)
+            query = query.order_by(cls.created_at)
+            return query.all()
+        return cls.get_all(session)
 
     @classmethod
-    def get_all_active(cls, session):
+    async def get_all_active(cls, session):
         return session.query(cls).filter(cls.is_active == True).all()
 
 

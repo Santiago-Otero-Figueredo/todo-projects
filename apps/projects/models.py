@@ -111,6 +111,9 @@ class Task(ModeloDetalle):
         session.commit()
         session.refresh(self)
 
+    @classmethod
+    def get_all(cls, session):
+        return session.query(cls).order_by(cls.update_at.desc()).all()
 
     @staticmethod
     async def create(data, session):
